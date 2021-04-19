@@ -18,7 +18,8 @@ namespace AspNetCoreTraining.Controllers
         [Route("getMessage")]
         public IActionResult GetMessage()
         {
-            return Ok();
+            var message = new { message = "hej, jestem tutaj!" };
+            return Ok(message);
         }
     }
 }
