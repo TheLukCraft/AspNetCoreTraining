@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
@@ -11,14 +12,21 @@ namespace AspNetCoreTraining.Controllers
     [Route("Course")]
     public class CourseController : ControllerBase
     {
-        public CourseController()
+        private readonly IConfiguration _configuration;
+        public CourseController(IConfiguration configuration)
         {
+            _configuration = configuration;
         }
         [HttpGet]
         [Route("getMessage")]
         public IActionResult GetMessage()
         {
-            var message = new { message = "hej, jestem tutaj!" };
+            var refreshTime = _configuration.GetValue<int>("Application:RefreshTime");
+            var message = new Message()
+            {
+                Content = $"My refresh time is: {refreshTime}",
+                Author = "Łukasz"
+            };
             return Ok(message);
         }
     }

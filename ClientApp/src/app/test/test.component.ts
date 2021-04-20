@@ -17,7 +17,7 @@ export class TestComponent implements OnInit {
   }
   sendRequestToBackend() {
     this.http.get("https://localhost:44371/" + "Course" + "/getMessage").subscribe(response => {
-      this.backendResponse = (response as any).toString();
+      console.log(response);
     },
       error => {
         this.backendResponse = error;
