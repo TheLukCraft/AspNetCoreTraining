@@ -29,5 +29,11 @@ namespace AspNetCoreTraining.Controllers
             };
             return Ok(message);
         }
+        [HttpPost]
+        [Route("sendMessage")]
+        public IActionResult SendMessage([FromBody]Message message)
+        {
+            return Ok(message);
+        }
     }
 }
