@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using AspNetCoreTraining.Database.Entities;
+using AspNetCoreTraining.Database.Repositories;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using System;
@@ -13,9 +15,11 @@ namespace AspNetCoreTraining.Controllers
     public class CourseController : ControllerBase
     {
         private readonly IConfiguration _configuration;
-        public CourseController(IConfiguration configuration)
+        private readonly IMessagesRepository _messagesRepository;
+        public CourseController(IConfiguration configuration, IMessagesRepository messagesRepository)
         {
             _configuration = configuration;
+            _messagesRepository = messagesRepository;
         }
         [HttpGet]
         [Route("getMessage")]
@@ -33,7 +37,16 @@ namespace AspNetCoreTraining.Controllers
         [Route("sendMessage")]
         public IActionResult SendMessage([FromBody]Message message)
         {
-            return Ok(message);
+            var messageEntity = new MessageEntity
+            {
+                Content = message.Content
+            };
+            var result =_messagesRepository.Add(messageEntity);
+            if(result)
+            {
+                return Ok(message);
+            }
+            return NotFound();
         }
     }
 }
