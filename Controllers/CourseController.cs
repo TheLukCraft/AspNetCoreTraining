@@ -1,5 +1,6 @@
 ﻿using AspNetCoreTraining.Database.Entities;
 using AspNetCoreTraining.Database.Repositories;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
@@ -47,6 +48,13 @@ namespace AspNetCoreTraining.Controllers
                 return Ok(message);
             }
             return NotFound();
+        }
+
+        [Authorize("Administrator")]
+        [Route("getSomeSecreteData")]
+        public IActionResult GetSomeSecretData()
+        {
+            return Ok("SomeSecretKey");
         }
     }
 }

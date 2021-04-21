@@ -1,8 +1,9 @@
 using AspNetCoreTraining.Database;
+using AspNetCoreTraining.Database.Entities;
 using AspNetCoreTraining.Database.Repositories;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.SpaServices.AngularCli;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -26,6 +27,12 @@ namespace AspNetCoreTraining
         {
             services.AddDbContext<ApplicationDbContext>(x =>
             x.UseSqlServer(Configuration.GetConnectionString("Default")));
+
+            services.AddIdentity<ApplicationUserEntity, IdentityRole>(config =>
+            { 
+            config.SignIn.RequireConfirmedEmail = true;
+            })
+                .AddEntityFrameworkStores<ApplicationDbContext>();
 
             services.AddTransient<IMessagesRepository, MessagesRepository>();
 
@@ -59,6 +66,8 @@ namespace AspNetCoreTraining
             }
 
             app.UseRouting();
+            app.UseAuthentication();
+            app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {
